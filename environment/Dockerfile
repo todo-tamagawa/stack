@@ -47,40 +47,6 @@ RUN apt-get install -y --no-install-recommends \
         unzip \
         fakeroot
 
-# OpenCV
-ENV OPENCV_ROOT=/opt/opencv
-WORKDIR $OPENCV_ROOT
-
-RUN wget http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/3.2.0/opencv-3.2.0.zip
-RUN unzip opencv-3.2.0.zip
-RUN mkdir -p $OPENCV_ROOT/opencv-3.2.0/build
-WORKDIR $OPENCV_ROOT/opencv-3.2.0/build
-RUN cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_CUDA=OFF -D WITH_TBB=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D WITH_QT=ON -D WITH_OPENGL=ON ..
-RUN make
-RUN make install
-RUN ldconfig
-
-
-# setup stack
-RUN stack update
-RUN stack setup ghc-8.0.2
-RUN stack --resolver lts-8.11 install cabal-install
-RUN stack exec cabal update
-
-# Caffe
-ENV CAFFE_ROOT=/opt/caffe
-WORKDIR $CAFFE_ROOT
-ENV CLONE_TAG=1.0
-RUN git clone -b ${CLONE_TAG} --depth 1 https://github.com/BVLC/caffe.git .
-RUN mkdir build && cd build && \
-    cmake -DCPU_ONLY=OFF -DBUILD_python=OFF .. && \
-    make -j"$(nproc)" && \
-    make install
-RUN mkdir build_cpu && cd build_cpu && \
-    cmake -DCPU_ONLY=ON -DBUILD_python=OFF .. && \
-    make -j"$(nproc)" && \
-    make install
-
 # prepare db
 USER postgres
 RUN /etc/init.d/postgresql start && \
