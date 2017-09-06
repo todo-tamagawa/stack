@@ -21,5 +21,4 @@ addons:
     - ghc-7.10.2
 
 script:
-  - cd ix
   - stack --no-terminal --skip-ghc-check test
