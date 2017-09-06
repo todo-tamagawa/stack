@@ -5,7 +5,6 @@ language: generic
 service: docker
 
 before_install:
-  - pwd
   - docker build -t ix:builder environment/
   - docker run -itd --name builder -p 53001:53001 ix:builder
   - docker cp ix builder:/root/dev/ix
