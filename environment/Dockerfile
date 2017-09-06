@@ -3,6 +3,8 @@ FROM nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
 MAINTAINER nishida "nishida@xcompass.com"
 
 # Install dependencies.
+RUN apt-get clean
+RUN mv /var/lib/apt/lists ~/
 RUN sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 575159689BEFB442
 RUN echo 'deb http://download.fpcomplete.com/ubuntu yakkety main'| tee /etc/apt/sources.list.d/fpco.list
