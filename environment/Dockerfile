@@ -49,7 +49,7 @@ RUN apt-get install -y --no-install-recommends \
         unzip \
         fakeroot
 
-setup stack
+# setup stack
 RUN stack update
 RUN stack setup ghc-8.0.2
 RUN stack --resolver lts-8.11 install cabal-install
