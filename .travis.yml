@@ -10,6 +10,4 @@ before_install:
   - docker cp `pwd` builder:/root/dev/stack
 
 script:
-  - docker attach builder
-  - cd stack/ix/
-  - stack --no-terminal --skip-ghc-check --install-ghc --allow-different-user test
+  - docker exec builder /bin/sh -c "cd stack/ix/; stack test --allow-different-user;"
